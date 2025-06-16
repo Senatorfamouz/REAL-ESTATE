@@ -1,13 +1,10 @@
 import React from 'react'
-import SubAdmin from '../Dashboards/SubAdmin'
-import SuperAdmin from '../Dashboards/SuperAdmin'
-
+import Login from '../Auth/LogIn'
 
 const Allscreen = () => {
   return (
     <div>
-        <SubAdmin/>
-        <SuperAdmin/>
+        <Login/>
     </div>
   )
 }
