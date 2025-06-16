@@ -1,8 +1,11 @@
 import React from 'react'
+import Allscreen from './Components/Layout/Allscreen'
 
 const App = () => {
   return (
-    <div></div>
+    <div>
+      <Allscreen/>
+    </div>
   )
 }
 
