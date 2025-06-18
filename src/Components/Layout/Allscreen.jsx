@@ -1,10 +1,10 @@
 import React from 'react'
-import Login from '../Auth/LogIn'
+import AllRoutes from '../Routes/AllRoutes'
 
 const Allscreen = () => {
   return (
     <div>
-        <Login/>
+     <AllRoutes />
     </div>
   )
 }
