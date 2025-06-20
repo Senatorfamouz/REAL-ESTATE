@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-import CTAButton from '../Ui/CTAButton';
+import CTAButton from '../../Static/Ui/CTAButton';
 
-export const Error = () => {
+
+const Error = () => {
     return (
         <div className="flex flex-col justify-center items-center w-screen h-screen bg-gray-100">
             <h1 className="text-6xl font-bold text-black">404</h1>
@@ -17,5 +18,5 @@ export const Error = () => {
                 />
             </Link>
            `</div>
-)
-}
+)}
+export default Error
