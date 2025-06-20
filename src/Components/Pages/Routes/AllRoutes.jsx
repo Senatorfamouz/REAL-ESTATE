@@ -3,17 +3,17 @@
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import DashboardLayout from "../Routes/DashboardLayout";
-import Analytics from "../Dashboards/SuperAdmins/Analytics";
-import AddProperty from "../Dashboards/SuperAdmins/AddProperty";
-import PropertyDetails from "../Dashboards/SuperAdmins/PropertyDetails";
-import PropertyList from "../Dashboards/SuperAdmins/PropertyList";
-import AddAgent from "../Dashboards/SuperAdmins/AddAgent";
-import ListViews from "../Dashboards/SuperAdmins/ListViews";
-import AgentDetail from "../Dashboards/SuperAdmins/AgentDetail";
-import AllOrderList from "../Dashboards/SuperAdmins/AllOrderList";
-import Transact from "../Dashboards/SuperAdmins/Transact";
-import Setting from "../Dashboards/SuperAdmins/Setting";
-import { Error } from "./Error";
+import Analytics from "../../Dashboards/SuperAdmins/Analytics";
+import AddProperty from "../../Dashboards/SuperAdmins/AddProperty";
+import PropertyDetails from "../../Dashboards/SuperAdmins/PropertyDetails";
+import PropertyList from "../../Dashboards/SuperAdmins/PropertyList";
+import AddAgent from "../../Dashboards/SuperAdmins/AddAgent";
+import ListViews from "../../Dashboards/SuperAdmins/ListViews";
+import AgentDetail from "../../Dashboards/SuperAdmins/AgentDetail";
+import AllOrderList from "../../Dashboards/SuperAdmins/AllOrderList";
+import Transact from "../../Dashboards/SuperAdmins/Transact";
+import Setting from "../../Dashboards/SuperAdmins/Setting";
+import Error   from "../Routes/Error"
 
 const AllRoutes = () => {
   return (
