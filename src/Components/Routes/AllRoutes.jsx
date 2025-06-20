@@ -20,8 +20,9 @@ const AllRoutes = () => {
     <div>
       {/* <BrowserRouter> */}
         <Routes>
-          {/* Dashboard */}
 
+
+          {/* Dashboard */}
           <Route path='/' element={<DashboardLayout />}>
             <Route index element={<Analytics />} />
             <Route path='analytics' element={<Analytics />} />
