@@ -41,7 +41,7 @@ const PropertyList = () => {
       changeColor: "text-red-500",
     },
   ];
-
+    ////
   const properties = [
     {
       name: "Dvilla Residences Batu",
@@ -256,6 +256,7 @@ const PropertyList = () => {
           </tbody>
         </table>
       </div>
+      
     </div>
   );
 };

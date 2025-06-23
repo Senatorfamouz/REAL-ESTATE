@@ -1,369 +1,442 @@
 "use client"
 
 import { useState } from "react"
-import { Card } from "../../ui/card"
-import { CardContent } from "../../../Components/Static/Ui/CardContent"
-import { Button } from "../../ui/button"
-import { Upload, Facebook, Instagram, Twitter, MessageCircle, Mail, MapPin, User } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+// import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Separator } from "@/components/ui/separator"
+// import { Checkbox } from "@/components/ui/checkbox"
+import { Shield, Save, X, UserPlus, AlertCircle, CheckCircle } from "lucide-react"
 
-const AddAdminPage = () => {
+export default function AddAdmin() {
   const [formData, setFormData] = useState({
-    agentName: "",
-    agentEmail: "",
-    agentNumber: "",
-    propertiesNumber: "",
-    agentAddress: "",
-    zipCode: "",
-    city: "",
-    country: "",
-    facebookUrl: "",
-    instagramUrl: "",
-    twitterUrl: "",
+    name: "",
+    email: "",
+    role: "Admin",
+    department: "",
+    phone: "",
+    location: "",
+    permissions: {
+      userManagement: false,
+      systemSettings: false,
+      reportsAccess: false,
+      auditLogs: false,
+      contentManagement: false,
+      billingAccess: false,
+    },
   })
 
-  const [dragActive, setDragActive] = useState(false)
-  const [uploadedImage, setUploadedImage] = useState(null)
+  const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null) // 'success' | 'error' | null
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
+  const roles = [
+    { value: "Super Admin", label: "Super Admin", description: "Full system access" },
+    { value: "Admin", label: "Admin", description: "Standard admin privileges" },
+    { value: "Moderator", label: "Moderator", description: "Content and user moderation" },
+    { value: "Support", label: "Support", description: "Customer support access" },
+  ]
+
+  const permissionsList = [
+    { key: "userManagement", label: "User Management", description: "Create, edit, and delete users" },
+    { key: "systemSettings", label: "System Settings", description: "Modify system configuration" },
+    { key: "reportsAccess", label: "Reports Access", description: "View and generate reports" },
+    { key: "auditLogs", label: "Audit Logs", description: "Access system audit logs" },
+    { key: "contentManagement", label: "Content Management", description: "Manage site content" },
+    { key: "billingAccess", label: "Billing Access", description: "Access billing information" },
+  ]
+
+  const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [field]: value,
+    }))
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "",
+      }))
+    }
+  }
+
+  const handlePermissionChange = (permission, checked) => {
+    setFormData((prev) => ({
+      ...prev,
+      permissions: {
+        ...prev.permissions,
+        [permission]: checked,
+      },
     }))
   }
 
-  const handleDrag = (e) => {
+  const validateForm = () => {
+    const newErrors = {}
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required"
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required"
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address"
+    }
+
+    if (!formData.department.trim()) {
+      newErrors.department = "Department is required"
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required"
+    }
+
+    if (!formData.location.trim()) {
+      newErrors.location = "Location is required"
+    }
+
+    // Check if at least one permission is selected
+    const hasPermissions = Object.values(formData.permissions).some((permission) => permission)
+    if (!hasPermissions) {
+      newErrors.permissions = "Please select at least one permission"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    e.stopPropagation()
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true)
-    } else if (e.type === "dragleave") {
-      setDragActive(false)
+
+    if (!validateForm()) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitStatus(null)
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      // Simulate success
+      setSubmitStatus("success")
+
+      // Reset form after success
+      setTimeout(() => {
+        setFormData({
+          name: "",
+          email: "",
+          role: "Admin",
+          department: "",
+          phone: "",
+          location: "",
+          permissions: {
+            userManagement: false,
+            systemSettings: false,
+            reportsAccess: false,
+            auditLogs: false,
+            contentManagement: false,
+            billingAccess: false,
+          },
+        })
+        setSubmitStatus(null)
+      }, 3000)
+    } catch (error) {
+      setSubmitStatus("error")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  const handleDrop = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0]
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader()
-        reader.onload = (e) => setUploadedImage(e.target.result)
-        reader.readAsDataURL(file)
-      }
-    }
-  }
-
-  const handleFileSelect = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0]
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader()
-        reader.onload = (e) => setUploadedImage(e.target.result)
-        reader.readAsDataURL(file)
-      }
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Agent data:", formData)
-    // Handle form submission
-  }
-
-  const handleCancel = () => {
-    // Handle cancel action
-    console.log("Cancel add agent")
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      email: "",
+      role: "Admin",
+      department: "",
+      phone: "",
+      location: "",
+      permissions: {
+        userManagement: false,
+        systemSettings: false,
+        reportsAccess: false,
+        auditLogs: false,
+        contentManagement: false,
+        billingAccess: false,
+      },
+    })
+    setErrors({})
+    setSubmitStatus(null)
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
-      {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-slate-700">
-        <h1 className="text-2xl font-bold">Add Agent</h1>
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <span>Real Estate</span>
-          <span>•</span>
-          <span>Add Agent</span>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+            <UserPlus className="w-8 h-8" />
+            Add New Admin
+          </h1>
+          <p className="text-gray-600 mt-2">Create a new administrator account with specific permissions</p>
         </div>
-      </div>
 
-      <div className="flex">
-        {/* Left Sidebar - Agent Preview */}
-        <div className="w-80 p-6 border-r border-slate-700">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              {/* Profile Section */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-slate-600 flex items-center justify-center overflow-hidden">
-                  {uploadedImage ? (
-                    <img src={uploadedImage || "/placeholder.svg"} alt="Agent" className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-8 h-8 text-slate-400" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">{formData.agentName || "Michael A. Miner"}</h3>
-                  <p className="text-sm text-slate-400">{formData.agentEmail || "michaelminer@dabyagent.com"}</p>
-                </div>
-              </div>
+        {/* Status Messages */}
+        {submitStatus === "success" && (
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-800">
+            <CheckCircle className="w-5 h-5" />
+            Admin account created successfully!
+          </div>
+        )}
 
-              {/* Properties Info */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-white font-medium">{formData.propertiesNumber || "243"} Properties</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                  <MapPin className="w-4 h-4" />
-                  <span>{formData.agentAddress || "Lincoln Drive Harrisburg, PA 17101 U.S.A"}</span>
-                </div>
-              </div>
+        {submitStatus === "error" && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-800">
+            <AlertCircle className="w-5 h-5" />
+            Failed to create admin account. Please try again.
+          </div>
+        )}
 
-              {/* Social Media */}
-              <div className="mb-6">
-                <p className="text-sm text-slate-400 mb-3">Social Media :</p>
-                <div className="flex gap-3">
-                  <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
-                    <Facebook className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center">
-                    <Instagram className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-blue-400 rounded flex items-center justify-center">
-                    <Twitter className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-green-600 rounded flex items-center justify-center">
-                    <MessageCircle className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
-                    <Mail className="w-4 h-4" />
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Main Form */}
+            <Card className="md:col-span-2">
+              <CardHeader>
+                <CardTitle>Admin Information</CardTitle>
+                <CardDescription>Enter the basic information for the new admin</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Avatar Preview */}
+                <div className="flex items-center space-x-4">
+                  <Avatar className="w-20 h-20">
+                    <AvatarImage src="/placeholder.svg?height=80&width=80" alt="New Admin" />
+                    <AvatarFallback className="text-lg">
+                      {formData.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase() || "NA"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="text-lg font-semibold">{formData.name || "New Admin"}</h3>
+                    <Badge variant="secondary" className="mt-1">
+                      <Shield className="w-3 h-3 mr-1" />
+                      {formData.role}
+                    </Badge>
                   </div>
                 </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-3">
-                <Button onClick={handleSubmit} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  Add Agent
+                <Separator />
+
+                {/* Form Fields */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Full Name *
+                    </label>
+                    <input
+                      id="name"
+                      className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        errors.name ? "border-red-500" : "border-input bg-background"
+                      }`}
+                      placeholder="Enter full name"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                    />
+                    {errors.name && (
+                      <p className="text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Email Address *
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        errors.email ? "border-red-500" : "border-input bg-background"
+                      }`}
+                      placeholder="Enter email address"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="role"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Role *
+                    </label>
+                    <select
+                      id="role"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      value={formData.role}
+                      onChange={(e) => handleInputChange("role", e.target.value)}
+                    >
+                      {roles.map((role) => (
+                        <option key={role.value} value={role.value}>
+                          {role.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="department"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Department *
+                    </label>
+                    <input
+                      id="department"
+                      className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        errors.department ? "border-red-500" : "border-input bg-background"
+                      }`}
+                      placeholder="Enter department"
+                      value={formData.department}
+                      onChange={(e) => handleInputChange("department", e.target.value)}
+                    />
+                    {errors.department && (
+                      <p className="text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.department}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="phone"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Phone Number *
+                    </label>
+                    <input
+                      id="phone"
+                      className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        errors.phone ? "border-red-500" : "border-input bg-background"
+                      }`}
+                      placeholder="Enter phone number"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                    />
+                    {errors.phone && (
+                      <p className="text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.phone}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="location"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Location *
+                    </label>
+                    <input
+                      id="location"
+                      className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        errors.location ? "border-red-500" : "border-input bg-background"
+                      }`}
+                      placeholder="Enter location"
+                      value={formData.location}
+                      onChange={(e) => handleInputChange("location", e.target.value)}
+                    />
+                    {errors.location && (
+                      <p className="text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.location}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Permissions Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Permissions</CardTitle>
+                <CardDescription>Select admin permissions</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {permissionsList.map((permission) => (
+                  <div key={permission.key} className="flex items-start space-x-3">
+                    <Checkbox
+                      id={permission.key}
+                      checked={formData.permissions[permission.key]}
+                      onCheckedChange={(checked) => handlePermissionChange(permission.key, checked)}
+                    />
+                    <div className="grid gap-1.5 leading-none">
+                      <label
+                        htmlFor={permission.key}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                      >
+                        {permission.label}
+                      </label>
+                      <p className="text-xs text-muted-foreground">{permission.description}</p>
+                    </div>
+                  </div>
+                ))}
+                {errors.permissions && (
+                  <p className="text-sm text-red-500 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.permissions}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Action Buttons */}
+          <Card className="mt-6">
+            <CardContent className="pt-6">
+              <div className="flex gap-4 justify-end">
+                <Button type="button" variant="outline" onClick={handleReset} disabled={isSubmitting}>
+                  <X className="w-4 h-4 mr-2" />
+                  Reset Form
                 </Button>
-                <Button
-                  onClick={handleCancel}
-                  variant="outline"
-                  className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700"
-                >
-                  Cancel
+                <Button type="submit" disabled={isSubmitting} className="min-w-[120px]">
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Create Admin
+                    </>
+                  )}
                 </Button>
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Add Agent Photo Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Add Agent Photo</h2>
-              <div
-                className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-                  dragActive ? "border-blue-500 bg-blue-500/10" : "border-slate-600 hover:border-slate-500"
-                }`}
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-                <div className="space-y-4">
-                  <div className="w-16 h-16 mx-auto bg-slate-700 rounded-lg flex items-center justify-center">
-                    <Upload className="w-8 h-8 text-slate-400" />
-                  </div>
-                  <div>
-                    <p className="text-lg text-white mb-2">Drop your images here, or click to browse</p>
-                    <p className="text-sm text-slate-400">
-                      1600 x 1200 (4:3) recommended. PNG, JPG and GIF files are allowed
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Agent Information Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-6">Agent Information</h2>
-              <div className="space-y-6">
-                {/* Name and Email Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Agent Name</label>
-                    <input
-                      type="text"
-                      name="agentName"
-                      value={formData.agentName}
-                      onChange={handleInputChange}
-                      placeholder="Full Name"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Agent Email</label>
-                    <input
-                      type="email"
-                      name="agentEmail"
-                      value={formData.agentEmail}
-                      onChange={handleInputChange}
-                      placeholder="Enter Email"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                {/* Agent Number and Properties Number Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Agent Number</label>
-                    <input
-                      type="text"
-                      name="agentNumber"
-                      value={formData.agentNumber}
-                      onChange={handleInputChange}
-                      placeholder="Enter Number"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Properties Number</label>
-                    <input
-                      type="number"
-                      name="propertiesNumber"
-                      value={formData.propertiesNumber}
-                      onChange={handleInputChange}
-                      placeholder="Enter Properties Number"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Agent Address</label>
-                  <textarea
-                    name="agentAddress"
-                    value={formData.agentAddress}
-                    onChange={handleInputChange}
-                    placeholder="Enter address"
-                    rows={3}
-                    className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  />
-                </div>
-
-                {/* Zip Code, City, Country Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Zip Code</label>
-                    <input
-                      type="text"
-                      name="zipCode"
-                      value={formData.zipCode}
-                      onChange={handleInputChange}
-                      placeholder="Zip Code"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">City</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                      placeholder="City"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Country</label>
-                    <select
-                      name="country"
-                      value={formData.country}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="">Select Country</option>
-                      <option value="US">United States</option>
-                      <option value="CA">Canada</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="AU">Australia</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Social Media URLs Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Facebook URL</label>
-                    <input
-                      type="url"
-                      name="facebookUrl"
-                      value={formData.facebookUrl}
-                      onChange={handleInputChange}
-                      placeholder="Enter URL"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Instagram URL</label>
-                    <input
-                      type="url"
-                      name="instagramUrl"
-                      value={formData.instagramUrl}
-                      onChange={handleInputChange}
-                      placeholder="Enter URL"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Twitter URL</label>
-                    <input
-                      type="url"
-                      name="twitterUrl"
-                      value={formData.twitterUrl}
-                      onChange={handleInputChange}
-                      placeholder="Enter URL"
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-4 pt-6">
-                  <Button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white">
-                    Create Agent
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={handleCancel}
-                    className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   )
 }
-
-export default AddAdminPage
