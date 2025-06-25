@@ -1,175 +1,199 @@
-import React, { useEffect, useState } from 'react';
-import { FiLogOut, FiMaximize } from 'react-icons/fi';
-import { FaRegQuestionCircle, FaUserCircle } from 'react-icons/fa';
-import { IoMoonOutline, IoSearchSharp, IoSunnyOutline } from "react-icons/io5";
-import { MdOutlineSettings } from "react-icons/md";
-import { RiNotification3Line } from "react-icons/ri";
-import { RxHamburgerMenu } from "react-icons/rx";
-import profile from '../../../assets/dash logo.jpg';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Search, Bell, User, Moon, Sun, LogOut, Settings } from 'lucide-react';
+import AdminProfile from './AdminProfile';
 
 const Header = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    // Check for saved theme preference or use system preference
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) return savedTheme === 'dark';
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return false;
-  });
-  
-  const dropdownRef = React.useRef(null);
+  const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: 'New property added', time: '2 mins ago', read: false },
+    { id: 2, text: 'Payment received', time: '1 hour ago', read: true },
+    { id: 3, text: 'New message from client', time: '3 hours ago', read: false },
+  ]);
 
-  // Handle click outside dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Apply theme changes
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [darkMode]);
-
-  // System theme change listener
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      setDarkMode(mediaQuery.matches);
-    };
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
+  // Toggle dark mode
   const toggleTheme = () => {
     setDarkMode(!darkMode);
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('darkMode', !darkMode);
   };
 
+  // Handle search
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  // Mark notification as read
+  const markAsRead = (id) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, read: true } : n
+    ));
+  };
+
+  // Check for saved theme preference
+  useEffect(() => {
+    const savedMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(savedMode);
+    if (savedMode) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
   return (
-    <header className="top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-4 bg-white fixed shadow-sm pc:w-[85%] w-full  dark:bg-gray-800 transition-colors duration-200">
-      {/* Left section - hamburger and search */}
-      <div className="flex items-center gap-4 sm:gap-6 ml-2 sm:ml-5">
-        <button 
-          className="text-gray-600 hover:scale-110 transition duration-150 dark:text-gray-300"
-          aria-label="Menu"
-        >
-          <RxHamburgerMenu className="w-6 h-6 sm:w-7 sm:h-7" />
-        </button>
-
-        {/* Search bar - visible on sm screens and up */}
-        <div className="relative hidden sm:block">
-          <input
-            type="text"
-            placeholder="Search Properties"
-            className="pl-10 pr-4 py-2 rounded-md bg-gray-100 text-sm text-black focus:outline-none focus:ring-2 focus:ring-amber-200 focus:bg-white transition-all duration-200 dark:bg-gray-700 dark:text-white dark:focus:bg-gray-600 dark:focus:ring-amber-500 w-full sm:w-64"
-          />
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-            <IoSearchSharp className="w-4 h-4 sm:w-5 sm:h-5" />
-          </span>
-        </div>
-      </div>
-
-      {/* Right section - icons and profile */}
-      <div className="flex items-center gap-3 sm:gap-4 relative" ref={dropdownRef}>
-        {/* Theme toggle button - responsive and accessible */}
-        <button 
-          onClick={toggleTheme}
-          className="p-1.5 rounded-full hover:bg-amber-100 dark:hover:bg-gray-700 transition-colors duration-200"
-          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {darkMode ? (
-            <IoSunnyOutline className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
-          ) : (
-            <IoMoonOutline className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" />
-          )}
-        </button>
-
-        {/* Fullscreen - hidden on mobile */}
-        <button 
-          className="hidden sm:flex p-1.5 rounded-full hover:bg-amber-100 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-600 dark:text-gray-300"
-          aria-label="Fullscreen"
-        >
-          <FiMaximize className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-
-        {/* Notification - with badge */}
-        <button 
-          className="p-1.5 rounded-full hover:bg-amber-100 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-600 dark:text-gray-300 relative"
-          aria-label="Notifications"
-        >
-          <RiNotification3Line className="w-5 h-5 sm:w-6 sm:h-6" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
-
-        {/* Settings - hidden on mobile */}
-        <button 
-          className="hidden sm:flex p-1.5 rounded-full hover:bg-amber-100 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-600 dark:text-gray-300"
-          aria-label="Settings"
-        >
-          <MdOutlineSettings className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-
-        {/* Profile dropdown */}
-        <div className="relative ml-1 sm:ml-0">
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="focus:outline-none"
-            aria-label="Profile menu"
-            aria-expanded={dropdownOpen}
-          >
-            <img
-              src={profile}
-              alt="Profile"
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 border-transparent hover:border-amber-300 dark:hover:border-gray-500 transition-all duration-200"
+    <header className="fixed w-[80%] top-0 z-10 bg-white shadow-sm mb-1">
+      <div className="flex items-center justify-between px-3 py-3">
+        {/* Search Bar */}
+        <form onSubmit={handleSearch} className="flex-1 max-w-md">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search properties, clients..."
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
+          </div>
+        </form>
+
+        <div className="flex items-center space-x-6">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {darkMode ? (
+              <Sun className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <Moon className="h-5 w-5 text-gray-600" />
+            )}
           </button>
-          
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 dark:bg-gray-800 dark:border-gray-700 transition-all duration-200">
-              <a 
-                href="/profile" 
-                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <FaUserCircle className="mr-2" /> My Profile
-              </a>
-              <a 
-                href="/settings" 
-                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <MdOutlineSettings className="mr-2" /> Settings
-              </a>
-              <a 
-                href="/support" 
-                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <FaRegQuestionCircle className="mr-2" /> Help & Support
-              </a>
-              <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-              <button
-                onClick={() => {
-                  alert("Logging out...");
-                  setDropdownOpen(false);
-                }}
-                className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <FiLogOut className="mr-2" /> Logout
-              </button>
-            </div>
-          )}
+
+          {/* Notifications */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 relative transition-colors"
+              aria-label="Notifications"
+            >
+              <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              {notifications.some(n => !n.read) && (
+                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              )}
+            </button>
+
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
+                <div className="p-3 border-b border-gray-200 dark:border-gray-600">
+                  <h3 className="font-medium text-gray-800 dark:text-white">Notifications</h3>
+                </div>
+                <div className="max-h-80 overflow-y-auto">
+                  {notifications.length > 0 ? (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`p-3 border-b border-gray-100 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 ${!notification.read ? 'bg-blue-50 dark:bg-gray-600' : ''}`}
+                        onClick={() => markAsRead(notification.id)}
+                      >
+                        <p className="text-sm font-medium text-gray-800 dark:text-white">
+                          {notification.text}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
+                          {notification.time}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="p-4 text-sm text-gray-500 dark:text-gray-300">
+                      No new notifications
+                    </p>
+                  )}
+                </div>
+                <Link
+                  to="/notifications"
+                  className="block p-3 text-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  View all notifications
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Profile Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              className="flex items-center space-x-2 focus:outline-none"
+              aria-label="User profile"
+            >
+              <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                <User className="h-4 w-4" />
+              </div>
+              <span className="hidden md:inline text-sm font-medium text-gray-700 dark:text-black">
+               Super-Admin
+              </span>
+            </button>
+
+            {showProfileMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
+                <Link
+                  to="/agent-details"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  <div className="flex items-center">
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </div>
+                </Link>
+                <Link
+                  to=""
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  <div className="flex items-center">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
+                  </div>
+                </Link>
+                <div className="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+                <button
+                  onClick={() => {
+                    // Add your logout logic here
+                    navigate('/login');
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  <div className="flex items-center">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign out
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Close dropdowns when clicking outside */}
+      {showNotifications && (
+        <div
+          className="fixed inset-0 z-10"
+          onClick={() => setShowNotifications(false)}
+        ></div>
+      )}
+      {showProfileMenu && (
+        <div
+          className="fixed inset-0 z-10"
+          onClick={() => setShowProfileMenu(false)}
+        ></div>
+      )}
     </header>
   );
 };

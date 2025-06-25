@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Shield, Save, X, UserPlus, AlertCircle, CheckCircle, ChevronDown } from "lucide-react"
 
-export default function AddAdmin() {
+export default function CreateAgent() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role: "Admin",
+    role: "Agent",
     department: "",
     phone: "",
     location: "",
@@ -30,10 +30,9 @@ export default function AddAdmin() {
   const [submitStatus, setSubmitStatus] = useState(null)
 
   const roles = [
-    { value: "Super Admin", label: "Super Admin", description: "Full system access" },
-    { value: "Admin", label: "Admin", description: "Standard admin privileges" },
-    { value: "Moderator", label: "Moderator", description: "Content and user moderation" },
-    { value: "Support", label: "Support", description: "Customer support access" },
+    { value: "Super Agent", label: "Super Agent", description: "Full system access" },
+    { value: "Agent", label: "Agent", description: "Standard agent privileges" },
+    { value: "Facility Manager", label: "Facility Manager", description: "Home management access" },
   ]
 
   
@@ -84,7 +83,7 @@ export default function AddAdmin() {
         setFormData({
           name: "",
           email: "",
-          role: "Admin",
+          role: "AGENT",
           department: "",
           phone: "",
           location: "",
@@ -111,7 +110,7 @@ export default function AddAdmin() {
     setFormData({
       name: "",
       email: "",
-      role: "Admin",
+      role: "AGENT",
       department: "",
       phone: "",
       location: "",
@@ -134,23 +133,23 @@ export default function AddAdmin() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
             <UserPlus className="w-8 h-8 text-indigo-600" />
-            Add New Admin
+            Add New Agent
           </h1>
-          <p className="text-gray-600 mt-2">Create a new administrator account with specific permissions</p>
+          <p className="text-gray-600 mt-2">Create a new agent account with specific permissions</p>
         </div>
 
         {/* Status Messages */}
         {submitStatus === "success" && (
           <div className="mb-6 p-4 bg-green-50/80 border border-green-100 rounded-lg shadow-sm flex items-center gap-3 text-green-800 backdrop-blur-sm">
             <CheckCircle className="w-5 h-5 text-green-600" />
-            <span>Admin account created successfully!</span>
+            <span>Agent account created successfully!</span>
           </div>
         )}
 
         {submitStatus === "error" && (
           <div className="mb-6 p-4 bg-red-50/80 border border-red-100 rounded-lg shadow-sm flex items-center gap-3 text-red-800 backdrop-blur-sm">
             <AlertCircle className="w-5 h-5 text-red-600" />
-            <span>Failed to create admin account. Please try again.</span>
+            <span>Failed to create agent account. Please try again.</span>
           </div>
         )}
 
@@ -159,14 +158,14 @@ export default function AddAdmin() {
             {/* Main Form */}
             <Card className="md:col-span-2 shadow-sm border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-xl">Admin Information</CardTitle>
-                <CardDescription>Enter the basic information for the new admin</CardDescription>
+                <CardTitle className="text-xl">Agent Information</CardTitle>
+                <CardDescription>Enter the basic information for the new agent</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Avatar Preview */}
                 <div className="flex items-center space-x-4 p-4 bg-gray-50/50 rounded-lg">
                   <Avatar className="w-20 h-20 border-2 border-white shadow">
-                    <AvatarImage src="/placeholder.svg?height=80&width=80" alt="New Admin" />
+                    <AvatarImage src="/placeholder.svg?height=80&width=80" alt="New Agent" />
                     <AvatarFallback className="text-lg bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-800">
                       {formData.name
                         .split(" ")
@@ -176,7 +175,7 @@ export default function AddAdmin() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800">{formData.name || "New Admin"}</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">{formData.name || "New Agent"}</h3>
                     <Badge variant="secondary" className="mt-1 bg-indigo-100 text-indigo-800 hover:bg-indigo-200">
                       <Shield className="w-3 h-3 mr-1" />
                       {formData.role}
@@ -361,7 +360,7 @@ export default function AddAdmin() {
                 ) : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    Create Admin
+                    Create Agent
                   </>
                 )}
               </Button>

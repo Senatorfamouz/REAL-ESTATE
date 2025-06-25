@@ -3,14 +3,15 @@ import { FiTrendingUp } from 'react-icons/fi';
 import { LuEye } from "react-icons/lu";
 import { FaPen } from "react-icons/fa";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-
+import List from './List';
+import Chart from './Chart';
 
 const AnalyticsCard = ({ title, value, trendPercentage, timePeriod }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+    <div className="bg-white text-gray-700 rounded-lg shadow-md p-6">
       <div className="flex justify-between items-start">
         <div>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">{title}</p>
+          <p className="text-gray-500 text-sm">{title}</p>
           <h3 className="text-2xl font-bold mt-1">{value}</h3>
         </div>
         <div className="flex items-center text-green-500">
@@ -74,10 +75,25 @@ const AnalyticsDashboard = () => {
         </div>
       </div>
 
+      {/* Actions Section */}
+      <div className="p-6">
+        <h2 className="text-[18px] font-semibold mb-6">Live Property chart</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          <Chart />
+        </div>
+      </div>
+      
+
     
      
       {/* Table Section */}
-     
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-6">Property List</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          
+          <List />
+        </div>
+      </div>
     </div>
   );
 };
