@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import {
   Mail,
   Phone,
@@ -132,21 +132,21 @@ const AgentDetail = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" onClick={handleGoBack}>
+            {/* <Button variant="outline" size="icon" onClick={handleGoBack}>
               <ArrowLeft className="h-4 w-4" />
-            </Button>
+            </Button> */}
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Agent Details</h1>
               <p className="text-gray-600">Complete agent profile and performance overview</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="icon">
+            {/* <Button variant="outline" size="icon">
               <Share2 className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="icon">
               <MoreVertical className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -241,14 +241,14 @@ const AgentDetail = () => {
 
                   {/* Action Buttons */}
                   <div className="mt-6 space-y-2">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                    {/* <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Contact Agent
                     </Button>
                     <Button variant="outline" className="w-full">
                       <Heart className="w-4 h-4 mr-2" />
                       Add to Favorites
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </CardContent>
@@ -304,194 +304,34 @@ const AgentDetail = () => {
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Agent Information</CardTitle>
                 {!isEditing ? (
-                  <Button onClick={handleEdit} variant="outline" size="sm">
+                  // <Button onClick={handleEdit} variant="outline" size="sm">
+                  //   <Edit3 className="h-4 w-4 mr-2" />
+                  //   Edit
+                  <button
+                    onClick={handleEdit}
+                    className="flex items-center px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
                     <Edit3 className="h-4 w-4 mr-2" />
                     Edit
-                  </Button>
+                  </button>
                 ) : (
                   <div className="flex gap-2">
-                    <Button onClick={handleSave} size="sm">
+                    <button
+                      onClick={handleSave}
+                      className="flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors"
+                    >
                       <Save className="h-4 w-4 mr-2" />
                       Save
-                    </Button>
-                    <Button onClick={handleCancel} variant="outline" size="sm">
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className="flex items-center px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
                       <X className="h-4 w-4 mr-2" />
                       Cancel
-                    </Button>
+                    </button>
                   </div>
                 )}
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Agent Name</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="agentName"
-                        value={editData.agentName}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.agentName}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Agent Email</label>
-                    {isEditing ? (
-                      <input
-                        type="email"
-                        name="agentEmail"
-                        value={editData.agentEmail}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.agentEmail}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Agent Number</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="agentNumber"
-                        value={editData.agentNumber}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.agentNumber}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Properties Number</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="propertiesNumber"
-                        value={editData.propertiesNumber}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.propertiesNumber}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Agent Address</label>
-                  {isEditing ? (
-                    <textarea
-                      name="agentAddress"
-                      value={editData.agentAddress}
-                      onChange={handleInputChange}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                    />
-                  ) : (
-                    <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.agentAddress}</p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Zip Code</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="zipCode"
-                        value={editData.zipCode}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.zipCode}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="city"
-                        value={editData.city}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.city}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="country"
-                        value={editData.country}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg">{agentData.country}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Facebook URL</label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="facebookUrl"
-                        value={editData.facebookUrl}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg text-sm truncate">{agentData.facebookUrl}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Instagram URL</label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="instagramUrl"
-                        value={editData.instagramUrl}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg text-sm truncate">{agentData.instagramUrl}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Twitter URL</label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="twitterUrl"
-                        value={editData.twitterUrl}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    ) : (
-                      <p className="px-3 py-2 bg-gray-50 rounded-lg text-sm truncate">{agentData.twitterUrl}</p>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Properties */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -534,6 +374,8 @@ const AgentDetail = () => {
                   <Button variant="outline">View All Properties</Button>
                 </div>
               </CardContent>
+            </Card>
+            </CardHeader>
             </Card>
           </div>
         </div>

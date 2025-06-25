@@ -36,8 +36,7 @@ const AllRoutes = () => {
             <Route path='transact' element={<Transact />} />
             <Route path='setting' element={<Setting />} />
           </Route>
-
-
+-
           {/* Error Route */}
           <Route path='*' element={<Error />} />
         </Routes>

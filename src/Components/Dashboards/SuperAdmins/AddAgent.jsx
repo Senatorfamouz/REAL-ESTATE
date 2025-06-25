@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card } from "../../ui/card"
 import { CardContent } from "../../../Components/Static/Ui/CardContent"
-import { Button } from "../../ui/button"
+// import { Button } from "../../ui/button"
 import { Upload, Facebook, Instagram, Twitter, MessageCircle, Mail, MapPin, User } from "lucide-react"
 
 const AddAdminPage = () => {
@@ -147,7 +147,7 @@ const AddAdminPage = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3">
-                <Button onClick={handleSubmit} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                {/* <Button onClick={handleSubmit} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                   Add Agent
                 </Button>
                 <Button
@@ -156,7 +156,7 @@ const AddAdminPage = () => {
                   className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700"
                 >
                   Cancel
-                </Button>
+                </Button> */}
               </div>
             </CardContent>
           </Card>
@@ -346,7 +346,7 @@ const AddAdminPage = () => {
 
                 {/* Action Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                  <Button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white">
+                  {/* <Button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white">
                     Create Agent
                   </Button>
                   <Button
@@ -355,7 +355,7 @@ const AddAdminPage = () => {
                     className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white"
                   >
                     Cancel
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </div>

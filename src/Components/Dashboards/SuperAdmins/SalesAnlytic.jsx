@@ -3,7 +3,7 @@
 import { Line, LineChart, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { ChevronDown, ArrowDown, ArrowUp, Home, DollarSign } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 // Remove this import if it's causing issues:
 // import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
@@ -33,10 +33,10 @@ const SalesAnalytics = () => {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-white">Sales Analytic</h2>
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700">
+              {/* <Button variant="outline" className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700">
                 This Month
                 <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
+              </Button> */}
             </div>
           </div>
 
@@ -117,10 +117,10 @@ const SalesAnalytics = () => {
                 </div>
 
                 <div className="flex gap-2 pt-2">
-                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white">Send</Button>
+                  {/* <Button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white">Send</Button>
                   <Button variant="outline" className="flex-1 bg-white/10 border-white/20 text-white hover:bg-white/20">
                     Receive
-                  </Button>
+                  </Button> */}
                 </div>
 
                 {/* Illustration placeholder */}
