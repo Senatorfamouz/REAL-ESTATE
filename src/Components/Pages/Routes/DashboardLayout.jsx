@@ -13,7 +13,7 @@ const DashboardLayout = () => {
       {/* Main Content Area - 80% width */}
       <div className="flex-1 flex flex-col sticky top-0 w-full">
         {/* Header spanning the 80% area */}
-        <div className="bg-white border-b border-gray-200 flex-shrink-0">
+        <div className="bg-white border-b border-gray-200 flex-shrink-0 mb-10">
           <Header />
         </div>
 
