@@ -1,5 +1,5 @@
 import React from 'react'
-import AllRoutes from '../../Components/Pages/Routes/AllRoutes'
+import AllRoutes from '../Pages/Routes/AllRoutes'
 const Allscreen = () => {
   return (
     <div>

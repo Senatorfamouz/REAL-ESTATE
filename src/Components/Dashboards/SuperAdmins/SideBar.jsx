@@ -10,7 +10,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   // State management
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -40,8 +40,8 @@ const SideBar = () => {
       path: '/listviews',
       subItems: [
         { name: 'ListViews', path: '/listViews' },
-        { name: 'AgentDetails', path: '/agent-details' },
-        { name: 'Add Agent', path: '/add-agent' }
+        { name: 'AdminDetails', path: '/admin-details' },
+        { name: 'Add Admin', path: '/add-admin' }
       ] 
     },
     { 
@@ -51,10 +51,13 @@ const SideBar = () => {
       subItems: [] 
     },
     { 
-      name: 'Transaction', 
+      name: 'Agents', 
       icon: <FiDollarSign />, 
-      path: '/transact',
-      subItems: [] 
+      path: '/agents',
+      subItems: [
+        { name: 'AgentGrid', path: '/agent-grid' },
+        { name: 'AddAgent', path: '/create-agent' }
+      ] 
     },
     { 
       name: 'Setting', 
@@ -106,7 +109,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className={`flex h-screen font-sans ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-800'}`}>
+    <div className={`flex h-screen fixed font-sans w-full ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-800'}`}>
       {/* Mobile Overlay */}
       {mobileSidebarOpen && windowWidth < 768 && (
         <div 
@@ -117,15 +120,15 @@ const SideBar = () => {
 
       {/* Sidebar Container */}
       <aside 
-        className={`
-          ${sidebarOpen ? 'w-64' : 'w-20'} 
-          ${windowWidth < 768 ? (mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}
-          fixed md:relative z-30 transition-all duration-300 ease-in-out 
-          ${darkMode ? 'bg-gray-800' : 'bg-white'} 
-          border-r ${darkMode ? 'border-gray-700' : 'border-gray-200'} 
-          shadow-lg h-full
-        `}
-      >
+  className={`
+    ${sidebarOpen ? 'w-[305px]' : 'w-20'}  // Changed from 'w-64' to 'w-[305px]' (64*4=256px + 4px)
+    ${windowWidth < 768 ? (mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}
+    fixed md:relative z-30 transition-all duration-300 ease-in-out 
+    ${darkMode ? 'bg-gray-800' : 'bg-white'} 
+    border-r ${darkMode ? 'border-gray-700' : 'border-gray-200'} 
+    shadow-lg h-full
+  `}
+>
         {/* Mobile Close Button */}
         {windowWidth < 768 && (
           <button 
@@ -185,7 +188,7 @@ const SideBar = () => {
                     <button
                       key={subItem.name}
                       onClick={() => handleNavigation(subItem.path)}
-                      className="w-full text-left block py-2 px-3 text-sm rounded-md hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-gray-700"
+                      className="w-full text-left block py-2 px-3 text-sm rounded-md hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-gray-300"
                     >
                       {subItem.name}
                     </button>

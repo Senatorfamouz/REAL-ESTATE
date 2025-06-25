@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Shield, Save, X, UserPlus, AlertCircle, CheckCircle, ChevronDown } from "lucide-react"
 
-export default function AddAdmin() {
+export default function CreateAgent() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role: "Admin",
+    role: "Agent",
     department: "",
     phone: "",
     location: "",
@@ -30,10 +30,9 @@ export default function AddAdmin() {
   const [submitStatus, setSubmitStatus] = useState(null)
 
   const roles = [
-    { value: "Super Admin", label: "Super Admin", description: "Full system access" },
-    { value: "Admin", label: "Admin", description: "Standard admin privileges" },
-    { value: "Moderator", label: "Moderator", description: "Content and user moderation" },
-    { value: "Support", label: "Support", description: "Customer support access" },
+    { value: "Super Agent", label: "Super Agent", description: "Full system access" },
+    { value: "Agent", label: "Agent", description: "Standard agent privileges" },
+    { value: "Facility Manager", label: "Facility Manager", description: "Home management access" },
   ]
 
   
@@ -84,7 +83,7 @@ export default function AddAdmin() {
         setFormData({
           name: "",
           email: "",
-          role: "Admin",
+          role: "AGENT",
           department: "",
           phone: "",
           location: "",
@@ -111,7 +110,7 @@ export default function AddAdmin() {
     setFormData({
       name: "",
       email: "",
-      role: "Admin",
+      role: "AGENT",
       department: "",
       phone: "",
       location: "",
@@ -134,110 +133,49 @@ export default function AddAdmin() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
             <UserPlus className="w-8 h-8 text-indigo-600" />
-            Add New Admin
+            Add New Agent
           </h1>
-          <p className="text-gray-600 mt-2">Create a new administrator account with specific permissions</p>
-        </div>
-      </div>
-
-      <div className="flex">
-        {/* Left Sidebar - Agent Preview */}
-        <div className="w-80 p-6 border-r border-slate-700">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              {/* Profile Section */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-slate-600 flex items-center justify-center overflow-hidden">
-                  {uploadedImage ? (
-                    <img src={uploadedImage || "/placeholder.svg"} alt="Agent" className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-8 h-8 text-slate-400" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">{formData.agentName || "Michael A. Miner"}</h3>
-                  <p className="text-sm text-slate-400">{formData.agentEmail || "michaelminer@dabyagent.com"}</p>
-                </div>
-              </div>
-
-              {/* Properties Info */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-white font-medium">{formData.propertiesNumber || "243"} Properties</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                  <MapPin className="w-4 h-4" />
-                  <span>{formData.agentAddress || "Lincoln Drive Harrisburg, PA 17101 U.S.A"}</span>
-                </div>
-              </div>
-
-              {/* Social Media */}
-              <div className="mb-6">
-                <p className="text-sm text-slate-400 mb-3">Social Media :</p>
-                <div className="flex gap-3">
-                  <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
-                    <Facebook className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center">
-                    <Instagram className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-blue-400 rounded flex items-center justify-center">
-                    <Twitter className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-green-600 rounded flex items-center justify-center">
-                    <MessageCircle className="w-4 h-4" />
-                  </div>
-                  <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-3">
-                <Button onClick={handleSubmit} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  Add Agent
-                </Button>
-                <Button
-                  onClick={handleCancel}
-                  variant="outline"
-                  className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <p className="text-gray-600 mt-2">Create a new agent account with specific permissions</p>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Add Agent Photo Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Add Agent Photo</h2>
-              <div
-                className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-                  dragActive ? "border-blue-500 bg-blue-500/10" : "border-slate-600 hover:border-slate-500"
-                }`}
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-                <div className="space-y-4">
-                  <div className="w-16 h-16 mx-auto bg-slate-700 rounded-lg flex items-center justify-center">
-                    <Upload className="w-8 h-8 text-slate-400" />
-                  </div>
+        {/* Status Messages */}
+        {submitStatus === "success" && (
+          <div className="mb-6 p-4 bg-green-50/80 border border-green-100 rounded-lg shadow-sm flex items-center gap-3 text-green-800 backdrop-blur-sm">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <span>Agent account created successfully!</span>
+          </div>
+        )}
+
+        {submitStatus === "error" && (
+          <div className="mb-6 p-4 bg-red-50/80 border border-red-100 rounded-lg shadow-sm flex items-center gap-3 text-red-800 backdrop-blur-sm">
+            <AlertCircle className="w-5 h-5 text-red-600" />
+            <span>Failed to create agent account. Please try again.</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Main Form */}
+            <Card className="md:col-span-2 shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-xl">Agent Information</CardTitle>
+                <CardDescription>Enter the basic information for the new agent</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Avatar Preview */}
+                <div className="flex items-center space-x-4 p-4 bg-gray-50/50 rounded-lg">
+                  <Avatar className="w-20 h-20 border-2 border-white shadow">
+                    <AvatarImage src="/placeholder.svg?height=80&width=80" alt="New Agent" />
+                    <AvatarFallback className="text-lg bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-800">
+                      {formData.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase() || "NA"}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800">{formData.name || "New Admin"}</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">{formData.name || "New Agent"}</h3>
                     <Badge variant="secondary" className="mt-1 bg-indigo-100 text-indigo-800 hover:bg-indigo-200">
                       <Shield className="w-3 h-3 mr-1" />
                       {formData.role}
@@ -396,23 +334,39 @@ export default function AddAdmin() {
             </Card>
           </div>
 
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-4 pt-6">
-                  <Button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white">
+          {/* Action Buttons */}
+          <div className="mt-6 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border-0">
+            <div className="flex gap-3 justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleReset}
+                disabled={isSubmitting}
+                className="border-gray-300 hover:bg-gray-50"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Reset Form
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="min-w-[120px] bg-indigo-600 hover:bg-indigo-700 shadow-sm"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
                     Create Agent
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={handleCancel}
-                    className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
+                  </>
+                )}
+              </Button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   )
