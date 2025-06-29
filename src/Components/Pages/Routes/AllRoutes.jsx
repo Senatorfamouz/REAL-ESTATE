@@ -47,8 +47,7 @@ const AllRoutes = () => {
             <Route path='create-agent' element={<CreateAgent />} />
             <Route path='agent-grid' element={<AgentGrid />} />
           </Route>
-
-
+-
           {/* Error Route */}
           <Route path='*' element={<Error />} />
         </Routes>
